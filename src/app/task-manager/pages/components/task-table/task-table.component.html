@@ -1,0 +1,50 @@
+<div class="container mx-auto p-4">
+  <!-- Filtros de tareas -->
+  <div class="flex space-x-4 mb-4">
+    <!-- Botón para mostrar tareas completadas -->
+    <button
+      [ngClass]="{'text-blue-500 font-bold': currentFilter === 'pending'}" (click)="filterTasks('pending')">
+      Pendientes
+    </button>
+    <button
+      [ngClass]="{'text-blue-500 font-bold': currentFilter === 'completed'}" (click)="filterTasks('completed')">
+      Completadas
+    </button>
+
+  </div>
+
+  <!-- Tabla de tareas -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full border border-gray-200">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 border-b border-gray-200 text-left">Nombre</th>
+          <th class="px-4 py-2 border-b border-gray-200 text-left">Completada</th>
+          <th class="px-4 py-2 border-b border-gray-200 text-left">Personas</th>
+          <th class="px-4 py-2 border-b border-gray-200 text-left">Fecha Límite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Mostrar las tareas filtradas en la vista -->
+        <tr *ngFor="let task of filteredTasks" class="hover:bg-gray-50">
+          <td class="px-4 py-2 border-b border-gray-200">{{ task.name }}</td>
+          <td class="px-4 py-2 border-b border-gray-200">
+            <!-- Checkbox para cambiar el estado de completado -->
+            <input type="checkbox" [checked]="task.completed" (change)="toggleTaskCompletion(task)"
+              class="h-4 w-4 text-blue-600">
+          </td>
+          <td class="px-4 py-2 border-b border-gray-200">
+            <div class="flex flex-wrap space-x-2">
+              <!-- Mostrar las personas asociadas a la tarea -->
+              <div *ngFor="let person of task.associatedPersons"
+                class="bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm">
+                {{ person.fullName }}
+              </div>
+            </div>
+          </td>
+          <td class="px-4 py-2 border-b border-gray-200">{{ task.limitDate | date: 'dd/MM/yyyy' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

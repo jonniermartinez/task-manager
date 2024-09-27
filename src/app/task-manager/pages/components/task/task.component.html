@@ -1,0 +1,61 @@
+<form [formGroup]="myForm"
+      (ngSubmit)="onSave()"
+      autocomplete="off"
+      class="max-h-96 overflow-auto flex flex-col gap-4"
+>
+  <div class="form-group">
+    <input
+    type="text"
+    placeholder="Nombre de la tarea" formControlName="name"
+    class="border p-3 rounded-sm w-full"
+    >
+    <span *ngIf="isValidField('name')" class="text-red-500 text-xs font-bold">
+      {{ getFieldError('name') }}
+    </span>
+  </div>
+
+  <div class="form-group">
+    <input type="date"
+    placeholder="Fecha límite"
+    formControlName="limitDate"
+    class="border p-3 rounded-sm w-full">
+    <span *ngIf="isValidField('limitDate')" class="text-red-500 text-xs font-bold">
+      {{ getFieldError('limitDate') }}
+    </span>
+  </div>
+
+  <div formArrayName="associatedPersons" class="form-group">
+    <div *ngFor="let person of associatedPersons.controls; let i = index" [formGroupName]="i" class="flex flex-col gap-4">
+      <h3 class="font-bold">Persona {{ i + 1 }}</h3>
+      <input type="text" placeholder="Nombre completo" formControlName="fullName"  class="border p-3 rounded-sm w-full">
+      <!-- Error para el nombre completo de la persona -->
+      <span *ngIf="isValidArrayField('associatedPersons', i, 'fullName')"
+       class="text-red-500 text-xs font-bold">
+        {{ getArrayFieldError('associatedPersons', i, 'fullName') }}
+      </span>
+
+      <input type="number" placeholder="Edad" formControlName="age"  class="border p-3 rounded-sm w-full">
+      <!-- Error para la edad de la persona -->
+      <span *ngIf="isValidArrayField('associatedPersons', i, 'age')"
+       class="text-red-500 text-xs font-bold">
+        {{ getArrayFieldError('associatedPersons', i, 'age') }}
+      </span>
+
+      <div formArrayName="skills">
+        <h4 class="font-bold">Habilidades</h4>
+        <div *ngFor="let skill of getSkills(i).controls; let j = index"  class="flex flex-col gap-4">
+          <input type="text" [formControlName]="j" placeholder="Habilidad" class="border rounded-sm"  class="border p-3 rounded-sm w-full">
+          <!-- Error para habilidades -->
+          <span *ngIf="skill.invalid && skill.touched" class="text-red-500 text-xs font-bold">Este campo es requerido</span>
+          <button type="button" (click)="removeSkill(i, j)" class="bg-red-500 w-fit mb-2 text-white p-2 font-bold rounded-lg">Habilidad -</button>
+        </div>
+        <button type="button" (click)="addSkill(i)" class="bg-blue-500 p-2 font-bold rounded-lg text-white">Habilidad +</button>
+      </div>
+      <button type="button" (click)="removePerson(i)" class="bg-red-500 mb-2 w-fit p-2 font-bold rounded-lg text-white">Persona -</button>
+    </div>
+    <button type="button" (click)="addPerson()" class="bg-green-500 p-2 font-bold rounded-lg text-white">Persona +</button>
+  </div>
+
+  <!-- Botón de enviar -->
+  <button type="submit" class="bg-slate-800 text-white py-3 px-6 rounded-lg">Enviar</button>
+</form>

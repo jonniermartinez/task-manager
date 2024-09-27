@@ -1,0 +1,21 @@
+<section class=" max-w-5xl mx-auto mt-5">
+  <h1 class="text-4xl text-center font-bold mb-5">
+   El mejor administrador de tareas 🌐
+  </h1>
+
+  <div class="mx-auto flex justify-center">
+    <button  (click)="openModal()" class="font-bold px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded">
+      Crear nueva tarea
+    </button>
+  </div>
+  <app-task-table></app-task-table>
+  <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50" *ngIf="showModal">
+    <div class=" bg-white w-96 min-h-96 shadow-lg rounded-lg p-7 flex flex-col">
+      <button class=" self-end" (click)="closeModal()">❌</button>
+      <div>
+        <h5 class=" font-bold text-center text-xl mb-4">Crear nueva tarea</h5>
+        <app-task-form></app-task-form>
+      </div>
+    </div>
+    </div>
+</section>

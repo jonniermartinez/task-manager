@@ -6,15 +6,14 @@ import { FormsModule } from '@angular/forms';
 
 import { TaskManagerRoutingModule } from './task-manager-routing.module';
 import { RootComponent } from './pages/root/root.component';
-import { TemplateComponent } from './pages/template/template.component';
 import { TaskComponent } from './pages/components/task/task.component';
 import { TaskTableComponent } from './pages/components/task-table/task-table.component';
+import { TagComponent } from "../components/tag/tag.component";
 
 
 @NgModule({
   declarations: [
     RootComponent,
-    TemplateComponent,
     TaskComponent,
     TaskTableComponent
   ],
@@ -22,7 +21,8 @@ import { TaskTableComponent } from './pages/components/task-table/task-table.com
     CommonModule,
     TaskManagerRoutingModule,
     ReactiveFormsModule,
-    FormsModule
-  ]
+    FormsModule,
+    TagComponent
+]
 })
 export class TaskManagerModule { }

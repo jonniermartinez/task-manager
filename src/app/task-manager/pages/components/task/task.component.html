@@ -1,61 +1,83 @@
-<form [formGroup]="myForm"
-      (ngSubmit)="onSave()"
-      autocomplete="off"
-      class="max-h-96 overflow-auto flex flex-col gap-4"
->
+<form [formGroup]="myForm" (ngSubmit)="onSave()" autocomplete="off"
+  class="max-h-96 overflow-auto flex flex-col gap-4 p-4">
+  <!-- Nombre de la tarea -->
   <div class="form-group">
-    <input
-    type="text"
-    placeholder="Nombre de la tarea" formControlName="name"
-    class="border p-3 rounded-sm w-full"
-    >
+    <input type="text" placeholder="Nombre de la tarea" formControlName="name" class="border p-3 rounded-sm w-full">
+    <!-- Mensaje de error del campo 'name' -->
     <span *ngIf="isValidField('name')" class="text-red-500 text-xs font-bold">
       {{ getFieldError('name') }}
     </span>
   </div>
 
+  <!-- Fecha límite de la tarea -->
   <div class="form-group">
-    <input type="date"
-    placeholder="Fecha límite"
-    formControlName="limitDate"
-    class="border p-3 rounded-sm w-full">
+    <input type="date" placeholder="Fecha límite" formControlName="limitDate" class="border p-3 rounded-sm w-full">
+    <!-- Mensaje de error del campo 'limitDate' -->
     <span *ngIf="isValidField('limitDate')" class="text-red-500 text-xs font-bold">
       {{ getFieldError('limitDate') }}
     </span>
   </div>
 
+  <!-- Arreglo de Personas asociadas -->
   <div formArrayName="associatedPersons" class="form-group">
-    <div *ngFor="let person of associatedPersons.controls; let i = index" [formGroupName]="i" class="flex flex-col gap-4">
+    <h2 class="text-lg font-bold mb-2">Personas Asociadas</h2>
+    <div *ngFor="let person of associatedPersons.controls; let i = index" [formGroupName]="i"
+      class="flex flex-col gap-4 border p-4 mb-4 rounded-lg shadow-sm">
       <h3 class="font-bold">Persona {{ i + 1 }}</h3>
-      <input type="text" placeholder="Nombre completo" formControlName="fullName"  class="border p-3 rounded-sm w-full">
+
+      <!-- Nombre completo de la persona -->
+      <input type="text" placeholder="Nombre completo" formControlName="fullName" class="border p-3 rounded-sm w-full">
       <!-- Error para el nombre completo de la persona -->
-      <span *ngIf="isValidArrayField('associatedPersons', i, 'fullName')"
-       class="text-red-500 text-xs font-bold">
+      <span *ngIf="isValidArrayField('associatedPersons', i, 'fullName')" class="text-red-500 text-xs font-bold">
         {{ getArrayFieldError('associatedPersons', i, 'fullName') }}
       </span>
 
-      <input type="number" placeholder="Edad" formControlName="age"  class="border p-3 rounded-sm w-full">
+      <!-- Edad de la persona -->
+      <input type="number" placeholder="Edad" formControlName="age" class="border p-3 rounded-sm w-full">
       <!-- Error para la edad de la persona -->
-      <span *ngIf="isValidArrayField('associatedPersons', i, 'age')"
-       class="text-red-500 text-xs font-bold">
+      <span *ngIf="isValidArrayField('associatedPersons', i, 'age')" class="text-red-500 text-xs font-bold">
         {{ getArrayFieldError('associatedPersons', i, 'age') }}
       </span>
 
-      <div formArrayName="skills">
+      <!-- Arreglo de Habilidades de la persona -->
+      <div formArrayName="skills" class="flex flex-col gap-4">
         <h4 class="font-bold">Habilidades</h4>
-        <div *ngFor="let skill of getSkills(i).controls; let j = index"  class="flex flex-col gap-4">
-          <input type="text" [formControlName]="j" placeholder="Habilidad" class="border rounded-sm"  class="border p-3 rounded-sm w-full">
+        <div *ngFor="let skill of getSkills(i).controls; let j = index" class="flex items-center gap-2 mb-2">
+          <input type="text" [formControlName]="j" placeholder="Habilidad" class="border p-3 rounded-sm w-full">
           <!-- Error para habilidades -->
-          <span *ngIf="skill.invalid && skill.touched" class="text-red-500 text-xs font-bold">Este campo es requerido</span>
-          <button type="button" (click)="removeSkill(i, j)" class="bg-red-500 w-fit mb-2 text-white p-2 font-bold rounded-lg">Habilidad -</button>
+          <span *ngIf="skill.invalid && skill.touched" class="text-red-500 text-xs font-bold">Este campo es
+            requerido</span>
+          <button type="button" (click)="removeSkill(i, j)" class="bg-red-500 text-white p-2 font-bold rounded-lg">
+            Eliminar Habilidad
+          </button>
         </div>
-        <button type="button" (click)="addSkill(i)" class="bg-blue-500 p-2 font-bold rounded-lg text-white">Habilidad +</button>
+        <button type="button" (click)="addSkill(i)" class="bg-blue-500 p-2 font-bold rounded-lg text-white">
+          Agregar Habilidad
+        </button>
       </div>
-      <button type="button" (click)="removePerson(i)" class="bg-red-500 mb-2 w-fit p-2 font-bold rounded-lg text-white">Persona -</button>
+
+      <!-- Botón para eliminar persona -->
+      <button type="button" (click)="removePerson(i)" class="bg-red-500 text-white p-2 font-bold rounded-lg mt-4">
+        Eliminar Persona
+      </button>
     </div>
-    <button type="button" (click)="addPerson()" class="bg-green-500 p-2 font-bold rounded-lg text-white">Persona +</button>
+
+    <!-- Botón para agregar una nueva persona -->
+    <button type="button" (click)="addPerson()" class="bg-green-500 p-2 font-bold rounded-lg text-white mt-4">
+      Agregar Persona
+    </button>
   </div>
 
-  <!-- Botón de enviar -->
-  <button type="submit" class="bg-slate-800 text-white py-3 px-6 rounded-lg">Enviar</button>
+  <!-- Mensajes de validación general del FormArray de personas -->
+<div *ngIf="associatedPersons.errors?.['nonUniqueNames']" class="text-red-500 text-xs font-bold">
+  {{ associatedPersons.errors?.['nonUniqueNames'] }}
+</div>
+<div *ngIf="associatedPersons.errors?.['noSkills']" class="text-red-500 text-xs font-bold">
+  {{ associatedPersons.errors?.['noSkills'] }}
+</div>
+
+  <!-- Botón de enviar formulario -->
+  <button type="submit" class="bg-slate-800 text-white py-3 px-6 rounded-lg">
+    Enviar
+  </button>
 </form>

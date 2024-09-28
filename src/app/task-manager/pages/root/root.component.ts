@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  templateUrl: './root.component.html',
-  styleUrl: './root.component.css'
+  templateUrl: './root.component.html'
 })
 export class RootComponent {
-  public showModal = true;
+  public showModal = false;
   openModal(): void {
     this.showModal = true;
   }
